@@ -11,7 +11,8 @@ use base 'Mojolicious::Controller';
 sub put_list {
   my $self = shift;
 
-  my $username = $self->current_user->{username};
+  my $current_user = $self->load_current_user;
+  my $username = $current_user->{username};
   my $payload = $self->req->json;
 
   my $collection = $self->mango->db->collection('lists');
@@ -28,7 +29,8 @@ sub put_list {
 sub get_user_lists {
   my $self = shift;
 
-  my $username = $self->current_user->{username};
+  my $current_user = $self->load_current_user;
+  my $username = $current_user->{username};
 
   my $collection = $self->mango->db->collection('lists');
 
@@ -45,7 +47,8 @@ sub get_list {
   my $self = shift;
 
   my $id = $self->param('id');
-  my $username = $self->current_user->{username};
+  my $current_user = $self->load_current_user;
+  my $username = $current_user->{username};
 
   my $collection = $self->mango->db->collection('lists');
 
@@ -62,7 +65,8 @@ sub post_list {
   my $self = shift;
   my $id = $self->param('id');
   my $payload = $self->req->json;
-  my $username = $self->current_user->{username};
+  my $current_user = $self->load_current_user;
+  my $username = $current_user->{username};
 
   my $collection = $self->mango->db->collection('lists');
 
@@ -78,7 +82,8 @@ sub post_list {
 sub delete_list {
   my $self = shift;
   my $id = $self->param('id');
-  my $username = $self->current_user->{username};
+  my $current_user = $self->load_current_user;
+  my $username = $current_user->{username};
 
   my $collection = $self->mango->db->collection('lists');
 
@@ -90,3 +95,5 @@ sub delete_list {
   });
 
 };
+
+1;

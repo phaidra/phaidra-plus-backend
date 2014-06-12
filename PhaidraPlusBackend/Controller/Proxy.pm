@@ -23,9 +23,9 @@ sub get_object_uwmetadata {
 	}
 	$url->query({mfv => $self->app->config->{phaidra}->{metadata_format_version}});
 	
-	my $token = $self->load_token;	
+	my $token = $self->load_phaidra_api_token;	
 	
-  	$self->ua->get($url => {$self->app->config->{authentication}->{token_header} => $token} => sub { 	
+  	$self->ua->get($url => {$self->app->config->{authentication}->{phaidra_api_token_header} => $token} => sub { 	
   		my ($ua, $tx) = @_;
 
 	  	if (my $res = $tx->success) {
@@ -80,9 +80,9 @@ sub search {
     
     #$self->app->log->debug($self->app->dumper(\%params));		
 
-	my $token = $self->load_token;
+	my $token = $self->load_phaidra_api_token;
 	
-  	$self->ua->get($url => {$self->app->config->{authentication}->{token_header} => $token} => sub { 	
+  	$self->ua->get($url => {$self->app->config->{authentication}->{phaidra_api_token_header} => $token} => sub { 	
   		my ($ua, $tx) = @_;
 
 	  	if (my $res = $tx->success) {
@@ -134,9 +134,9 @@ sub get_related_objects {
     
     #$self->app->log->debug($self->app->dumper(\%params));		
 
-	my $token = $self->load_token;
+	my $token = $self->load_phaidra_api_token;
 	
-  	$self->ua->get($url => {$self->app->config->{authentication}->{token_header} => $token} => sub { 	
+  	$self->ua->get($url => {$self->app->config->{authentication}->{phaidra_api_token_header} => $token} => sub { 	
   		my ($ua, $tx) = @_;
 
 	  	if (my $res = $tx->success) {
@@ -159,7 +159,8 @@ sub get_related_objects {
 sub search_owner {
     my $self = shift;  	 
     
-    my $username = defined($self->stash('username')) ? $self->stash('username') : $self->current_user->{username} ;
+    my $current_user = $self->load_current_user;
+    my $username = defined($self->stash('username')) ? $self->stash('username') : $current_user->{username} ;
     
     my $url = Mojo::URL->new;
 	$url->scheme('https');		
@@ -186,9 +187,9 @@ sub search_owner {
 	}
     $url->query(\%params);
 	
-	my $token = $self->load_token;
+	my $token = $self->load_phaidra_api_token;
 	
-  	$self->ua->get($url => {$self->app->config->{authentication}->{token_header} => $token} => sub { 	
+  	$self->ua->get($url => {$self->app->config->{authentication}->{phaidra_api_token_header} => $token} => sub { 	
   		my ($ua, $tx) = @_;
 
 	  	if (my $res = $tx->success) {
@@ -227,9 +228,9 @@ sub save_object_uwmetadata {
 		
 	$url->query({mfv => $self->app->config->{phaidra}->{metadata_format_version}});
 	
-	my $token = $self->load_token;
+	my $token = $self->load_phaidra_api_token;
 	
-  	$self->ua->post($url => {$self->app->config->{authentication}->{token_header} => $token},
+  	$self->ua->post($url => {$self->app->config->{authentication}->{phaidra_api_token_header} => $token},
   		json => $self->req->json,
   	 	sub { 	
 	  		my ($ua, $tx) = @_;
@@ -469,9 +470,9 @@ sub collection_create {
 		$url->path("/collection/create");
 	}
 	
-	my $token = $self->load_token;
+	my $token = $self->load_phaidra_api_token;
 
-  	$self->ua->post($url => {$self->app->config->{authentication}->{token_header} => $token},
+  	$self->ua->post($url => {$self->app->config->{authentication}->{phaidra_api_token_header} => $token},
   		json => $self->req->json,
   	 	sub { 	
 	  		my ($ua, $tx) = @_;
@@ -509,9 +510,9 @@ sub collection_order {
 		$url->path("/collection/$pid/members/order");
 	}
 	
-	my $token = $self->load_token;
+	my $token = $self->load_phaidra_api_token;
 
-  	$self->ua->post($url => {$self->app->config->{authentication}->{token_header} => $token},
+  	$self->ua->post($url => {$self->app->config->{authentication}->{phaidra_api_token_header} => $token},
   		json => $self->req->json,
   	 	sub { 	
 	  		my ($ua, $tx) = @_;
@@ -554,9 +555,9 @@ sub collection_member_order {
 		$url->path("/collection/$pid/members/$itempid/order/$position");
 	}
 	
-	my $token = $self->load_token;
+	my $token = $self->load_phaidra_api_token;
 
-  	$self->ua->post($url => {$self->app->config->{authentication}->{token_header} => $token},
+  	$self->ua->post($url => {$self->app->config->{authentication}->{phaidra_api_token_header} => $token},
   		json => $self->req->json,
   	 	sub { 	
 	  		my ($ua, $tx) = @_;
